@@ -47,7 +47,7 @@ jobs:
             #     fi
 
               run: |
-                response=$(curl --write-out "\n\nStatus Code: %{http_code}" --silent https://${{ secrets.BACKEND_FTP_ADDRESS }}/system/setup/)
+                response=$(curl --write-out "\n\nStatus Code: %{http_code}" --silent https://ftppipelinev1backendphplaravel8v1poc1.syncsystem.com.br/system/setup/)
                 status=$(echo "$response" | tail -n1 | awk '{print $4}') # Extract status code
                 if [[ "$status" -ne 200 ]] ; then
                     echo "Deploy Follow-up Actions Error - Debug and Check Steps/Log"
@@ -55,11 +55,11 @@ jobs:
                 else
                     echo "Deploy Follow-up Actions Successful"
                     echo "Content: $response"
-                fi                
+                fi
 
             - name: Deploy Follow-up Actions (frontend)
               run: |
-                response=$(curl --write-out "\n\nStatus Code: %{http_code}" --silent https://${{ secrets.FRONTEND_FTP_ADDRESS }}/system/setup/)
+                response=$(curl --write-out "\n\nStatus Code: %{http_code}" --silent https://ftppipelinev1backendphplaravel8v1poc1.syncsystem.com.br/system/setup/)
                 status=$(echo "$response" | tail -n1 | awk '{print $4}') # Extract status code
                 if [[ "$status" -ne 200 ]] ; then
                     echo "Deploy Follow-up Actions Error - Debug and Check Steps/Log"
@@ -67,4 +67,6 @@ jobs:
                 else
                     echo "Deploy Follow-up Actions Successful"
                     echo "Content: $response"
-                fi                
+                fi
+            # TODO: Seems that ${{ secrets.FRONTEND_FTP_ADDRESS }} doesn't work. Set these up in variable space (automate).
+                
