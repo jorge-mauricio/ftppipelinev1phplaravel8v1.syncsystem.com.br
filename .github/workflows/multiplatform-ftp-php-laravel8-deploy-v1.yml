@@ -495,6 +495,7 @@ jobs:
               shell: bash
 
             - name: Check Endpoints
+              working-directory: ./syncsystem-laravel8-v1
               run: |
                 until $(curl -s -o /dev/null -w "%{http_code}" \
                 https://${{ secrets.FRONTEND_FTP_ADDRESS }}/system/setup/ \
