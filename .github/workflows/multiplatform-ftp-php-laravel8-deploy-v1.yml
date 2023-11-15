@@ -9,7 +9,7 @@ on:
 # TODO: condition to staging/QA deploy success (including E2E test).
 
 jobs:
-    deploy:
+    syncsystem-ftp-php-laravel-v1-deploy:
         runs-on: ubuntu-latest
             # TODO: evaluate replacing with variable.
 
@@ -482,29 +482,29 @@ jobs:
                        -e 's|/../bootstrap/app.php|${{ secrets.LARAVEL_PUBLIC_INDEX_PATH_BOOTSTRAP }}|' index.php
               shell: bash
 
-            - name: Upload modified .htaccess and index.php (Frontend)
+            - name: Deploy Follow-up Actions (backend)
               run: |
-                lftp -c "
-                  set ftp:ssl-allow no; \
-                  open -u ${{ secrets.FRONTEND_FTP_USERNAME }},${{ secrets.FRONTEND_FTP_PASSWORD }} ${{ secrets.FRONTEND_FTP_ADDRESS }}; \
-                  mirror -R --reverse --only-newer --parallel=10 --exclude-glob .git* \
-                  --exclude .github/ \
-                  ./ /www/html
-                  quit
-                "
-              shell: bash
+                status_code=$(curl --write-out "%{http_code}" --silent --output /dev/null https://${{ secrets.BACKEND_FTP_ADDRESS }}/system/setup/)
+                if [[ "$status_code" -ne 200 ]] ; then
+                    echo "Deploy Follow-up Actions Error - Debug and Check Steps/Log"
+                    exit 1
+                else
+                    echo "Deploy Follow-up Actions Successful"
+                    echo "Content:"
+                    curl --silent https://${{ secrets.BACKEND_FTP_ADDRESS }}/system/setup/
+                fi
 
-            - name: Check Endpoints
-              working-directory: ./syncsystem-laravel8-v1
+            - name: Deploy Follow-up Actions (frontend)
               run: |
-                until $(curl -s -o /dev/null -w "%{http_code}" \
-                https://${{ secrets.FRONTEND_FTP_ADDRESS }}/system/setup/ \
-                https://${{ secrets.FRONTEND_FTP_ADDRESS }}/system/setup/ == 200); do
-                echo "Waiting for endpoints..."
-                sleep 30
-                done
-              timeout-minutes: 5
-              shell: bash
+                status_code=$(curl --write-out "%{http_code}" --silent --output /dev/null https://${{ secrets.FRONTEND_FTP_ADDRESS }}/system/setup/)
+                if [[ "$status_code" -ne 200 ]] ; then
+                    echo "Deploy Follow-up Actions Error - Debug and Check Steps/Log"
+                    exit 1
+                else
+                    echo "Deploy Follow-up Actions Successful"
+                    echo "Content:"
+                    curl --silent https://${{ secrets.FRONTEND_FTP_ADDRESS }}/system/setup/
+                fi
 
         # Add a conditional statement to run only on merged pull requests
         # if: |
