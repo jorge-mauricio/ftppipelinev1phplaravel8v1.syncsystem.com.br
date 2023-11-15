@@ -21,6 +21,9 @@ jobs:
                 php-version: '8.0'
                 tools: composer
 
+            - name: Change to Repository Directory
+              run: cd $GITHUB_WORKSPACE
+
             - name: Install Composer dependencies
               run: composer install
               working-directory: ''
