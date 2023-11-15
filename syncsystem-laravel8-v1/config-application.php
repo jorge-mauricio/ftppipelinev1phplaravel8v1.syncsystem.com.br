@@ -103,7 +103,7 @@ date_default_timezone_set('America/Sao_Paulo'); // not wired // double check
 // General configuration.
 // **************************************************************************************
 // Basic information.
-$gSystemConfig['configSystemClientName'] = "Planejamento Visual çé";
+$gSystemConfig['configSystemClientName'] = "SyncSystem - Multiplatform - PHP/Laravel8 - v1 - FTP Pipeline - v1 - PoC1";
 $gSystemConfig['configSystemClientDocument'] = ''; // SSN | CPF
 $gSystemConfig['configSystemClientCompanyNameLegal'] = '';
 $gSystemConfig['configSystemClientCompanyDocument'] = ''; // CPNJ

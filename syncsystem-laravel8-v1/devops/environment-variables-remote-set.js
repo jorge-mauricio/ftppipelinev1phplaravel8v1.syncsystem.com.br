@@ -286,8 +286,8 @@ const envKeysParsed = {
   ymlFormat: '',
 };
 
-const appURLFrontend = 'https://www.mydomain.com';
-const appURLBackend = 'https://backend.mydomain.com';
+const appURLFrontend = 'https://ftppipelinev1multiplatformphplaravel8v1poc1.syncsystem.com.br';
+const appURLBackend = 'https://ftppipelinev1backendphplaravel8v1poc1.syncsystem.com.br';
 // TODO: replace with .env or from github actions variables.
 
 // Secrets (debug data).

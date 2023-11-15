@@ -82,6 +82,9 @@ jobs:
             REPO_USER: '${{ secrets.REPO_USER }}'
             REPO_NAME: '${{ secrets.REPO_NAME }}'
             REPO_TOKEN: '${{ secrets.REPO_TOKEN }}'
+            LARAVEL_PUBLIC_INDEX_PATH_STORAGE_MAINTENANCE: '${{ secrets.LARAVEL_PUBLIC_INDEX_PATH_STORAGE_MAINTENANCE }}'
+            LARAVEL_PUBLIC_INDEX_PATH_AUTOLOAD: '${{ secrets.LARAVEL_PUBLIC_INDEX_PATH_AUTOLOAD }}'
+            LARAVEL_PUBLIC_INDEX_PATH_BOOTSTRAP: '${{ secrets.LARAVEL_PUBLIC_INDEX_PATH_BOOTSTRAP }}'
             FRONTEND_FTP_ADDRESS: '${{ secrets.FRONTEND_FTP_ADDRESS }}'
             FRONTEND_FTP_USERNAME: '${{ secrets.FRONTEND_FTP_USERNAME }}'
             FRONTEND_FTP_PASSWORD: '${{ secrets.FRONTEND_FTP_PASSWORD }}'
@@ -280,7 +283,7 @@ jobs:
                 echo "SetEnv APP_ENV 'production'" >> .htaccess; \
                 echo "SetEnv APP_KEY '${{ secrets.APP_KEY }}'" >> .htaccess; \
                 echo "SetEnv APP_DEBUG false" >> .htaccess; \
-                echo "SetEnv APP_URL 'https://ftppipelinev1backendphplaravel8v1.syncsystem.com.br'" >> .htaccess; \
+                echo "SetEnv APP_URL 'https://ftppipelinev1backendphplaravel8v1poc1.syncsystem.com.br'" >> .htaccess; \
                 echo "SetEnv LOG_CHANNEL '${{ secrets.LOG_CHANNEL }}'" >> .htaccess; \
                 echo "SetEnv BROADCAST_DRIVER '${{ secrets.BROADCAST_DRIVER }}'" >> .htaccess; \
                 echo "SetEnv CACHE_DRIVER '${{ secrets.CACHE_DRIVER }}'" >> .htaccess; \
@@ -302,10 +305,10 @@ jobs:
                 echo "SetEnv PUSHER_APP_CLUSTER '${{ secrets.PUSHER_APP_CLUSTER }}'" >> .htaccess; \
                 echo "SetEnv MIX_PUSHER_APP_KEY '${{ secrets.MIX_PUSHER_APP_KEY }}'" >> .htaccess; \
                 echo "SetEnv MIX_PUSHER_APP_CLUSTER '${{ secrets.MIX_PUSHER_APP_CLUSTER }}'" >> .htaccess; \
-                echo "SetEnv CONFIG_SYSTEM_URL 'https://ftppipelinev1multiplatformphplaravel8v1.syncsystem.com.br'" >> .htaccess; \
-                echo "SetEnv CONFIG_API_URL 'https://ftppipelinev1backendphplaravel8v1.syncsystem.com.br'" >> .htaccess; \
+                echo "SetEnv CONFIG_SYSTEM_URL 'https://ftppipelinev1multiplatformphplaravel8v1poc1.syncsystem.com.br'" >> .htaccess; \
+                echo "SetEnv CONFIG_API_URL 'https://ftppipelinev1backendphplaravel8v1poc1.syncsystem.com.br'" >> .htaccess; \
                 echo "SetEnv CONFIG_URL_FRONTEND_REACT '${{ secrets.CONFIG_URL_FRONTEND_REACT }}'" >> .htaccess; \
-                echo "SetEnv CONFIG_URL_FRONTEND_LARAVEL 'https://ftppipelinev1multiplatformphplaravel8v1.syncsystem.com.br'" >> .htaccess; \
+                echo "SetEnv CONFIG_URL_FRONTEND_LARAVEL 'https://ftppipelinev1multiplatformphplaravel8v1poc1.syncsystem.com.br'" >> .htaccess; \
                 echo "SetEnv DB_CONNECTION '${{ secrets.DB_CONNECTION }}'" >> .htaccess; \
                 echo "SetEnv DB_SYSTEM_HOST '${{ secrets.DB_SYSTEM_HOST }}'" >> .htaccess; \
                 echo "SetEnv DB_SYSTEM_PORT '${{ secrets.DB_SYSTEM_PORT }}'" >> .htaccess; \
@@ -398,7 +401,7 @@ jobs:
                 echo "SetEnv APP_ENV 'production'" >> .htaccess; \
                 echo "SetEnv APP_KEY '${{ secrets.APP_KEY }}'" >> .htaccess; \
                 echo "SetEnv APP_DEBUG false" >> .htaccess; \
-                echo "SetEnv APP_URL 'https://ftppipelinev1multiplatformphplaravel8v1.syncsystem.com.br'" >> .htaccess; \
+                echo "SetEnv APP_URL 'https://ftppipelinev1multiplatformphplaravel8v1poc1.syncsystem.com.br'" >> .htaccess; \
                 echo "SetEnv LOG_CHANNEL '${{ secrets.LOG_CHANNEL }}'" >> .htaccess; \
                 echo "SetEnv BROADCAST_DRIVER '${{ secrets.BROADCAST_DRIVER }}'" >> .htaccess; \
                 echo "SetEnv CACHE_DRIVER '${{ secrets.CACHE_DRIVER }}'" >> .htaccess; \
@@ -420,10 +423,10 @@ jobs:
                 echo "SetEnv PUSHER_APP_CLUSTER '${{ secrets.PUSHER_APP_CLUSTER }}'" >> .htaccess; \
                 echo "SetEnv MIX_PUSHER_APP_KEY '${{ secrets.MIX_PUSHER_APP_KEY }}'" >> .htaccess; \
                 echo "SetEnv MIX_PUSHER_APP_CLUSTER '${{ secrets.MIX_PUSHER_APP_CLUSTER }}'" >> .htaccess; \
-                echo "SetEnv CONFIG_SYSTEM_URL 'https://ftppipelinev1multiplatformphplaravel8v1.syncsystem.com.br'" >> .htaccess; \
-                echo "SetEnv CONFIG_API_URL 'https://ftppipelinev1backendphplaravel8v1.syncsystem.com.br'" >> .htaccess; \
+                echo "SetEnv CONFIG_SYSTEM_URL 'https://ftppipelinev1multiplatformphplaravel8v1poc1.syncsystem.com.br'" >> .htaccess; \
+                echo "SetEnv CONFIG_API_URL 'https://ftppipelinev1backendphplaravel8v1poc1.syncsystem.com.br'" >> .htaccess; \
                 echo "SetEnv CONFIG_URL_FRONTEND_REACT '${{ secrets.CONFIG_URL_FRONTEND_REACT }}'" >> .htaccess; \
-                echo "SetEnv CONFIG_URL_FRONTEND_LARAVEL 'https://ftppipelinev1multiplatformphplaravel8v1.syncsystem.com.br'" >> .htaccess; \
+                echo "SetEnv CONFIG_URL_FRONTEND_LARAVEL 'https://ftppipelinev1multiplatformphplaravel8v1poc1.syncsystem.com.br'" >> .htaccess; \
                 echo "SetEnv DB_CONNECTION '${{ secrets.DB_CONNECTION }}'" >> .htaccess; \
                 echo "SetEnv DB_SYSTEM_HOST '${{ secrets.DB_SYSTEM_HOST }}'" >> .htaccess; \
                 echo "SetEnv DB_SYSTEM_PORT '${{ secrets.DB_SYSTEM_PORT }}'" >> .htaccess; \
@@ -491,12 +494,23 @@ jobs:
                 "
               shell: bash
 
+            - name: Check Endpoints
+              run: |
+                until $(curl -s -o /dev/null -w "%{http_code}" \
+                https://${{ secrets.FRONTEND_FTP_ADDRESS }}/system/setup/ \
+                https://${{ secrets.FRONTEND_FTP_ADDRESS }}/system/setup/ == 200); do
+                echo "Waiting for endpoints..."
+                sleep 30
+                done
+              timeout-minutes: 5
+              shell: bash
+
         # Add a conditional statement to run only on merged pull requests
-        if: |
-          github.event_name == 'pull_request' && 
-          github.event.action == 'closed' && 
-          github.event.pull_request.merged == true &&
-          contains(github.event.pull_request.labels.*.name, 'deploy-full')
+        # if: |
+        #   github.event_name == 'pull_request' && 
+        #   github.event.action == 'closed' && 
+        #   github.event.pull_request.merged == true &&
+        #   contains(github.event.pull_request.labels.*.name, 'deploy-full')
         # Note: last line is condition for pull request to contain a label called 'deploy-full'.
         # TODO: test it.
 
