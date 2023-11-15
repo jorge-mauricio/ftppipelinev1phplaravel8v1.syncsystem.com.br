@@ -21,19 +21,35 @@ jobs:
                 php-version: '8.0'
                 tools: composer
 
-            - name: Change to Repository Directory
-              run: cd $GITHUB_WORKSPACE
+            # - name: Change to Repository Directory
+            #   run: cd $GITHUB_WORKSPACE
 
-            - name: Install Composer dependencies
-              run: composer install
-              working-directory: ''
+            # - name: Install Composer dependencies
+            #   run: composer install
+            #   working-directory: ''
 
-            - name: Check Endpoints
-            #working-directory: ./syncsystem-laravel8-v1
+            # - name: Check Endpoints
+            # #working-directory: ./syncsystem-laravel8-v1
+            #   run: |
+            #     until $(curl -s -o /dev/null -w "%{http_code}" https://ftppipelinev1backendphplaravel8v1poc1.syncsystem.com.br/system/setup/ https://ftppipelinev1multiplatformphplaravel8v1poc1.syncsystem.com.br/system/setup/ == 200); do
+            #     echo "Waiting for endpoints..."
+            #     sleep 30
+            #     done
+            #   timeout-minutes: 5
+            #   shell: bash
+
+            - name: Check https://ftppipelinev1backendphplaravel8v1poc1.syncsystem.com.br/system/setup/
               run: |
-                until $(curl -s -o /dev/null -w "%{http_code}" https://ftppipelinev1backendphplaravel8v1poc1.syncsystem.com.br/system/setup/ https://ftppipelinev1multiplatformphplaravel8v1poc1.syncsystem.com.br/system/setup/ == 200); do
-                echo "Waiting for endpoints..."
-                sleep 30
-                done
-              timeout-minutes: 5
-              shell: bash
+                status=$(curl --write-out '%{http_code}' --silent --output /dev/null https://ftppipelinev1backendphplaravel8v1poc1.syncsystem.com.br/system/setup/)
+                if [[ "$status" -ne 200 ]] ; then
+                    echo "Site not reachable"
+                    exit 1
+                fi
+
+            - name: Check https://ftppipelinev1multiplatformphplaravel8v1poc1.syncsystem.com.br/system/setup/
+              run: |
+                status=$(curl --write-out '%{http_code}' --silent --output /dev/null https://ftppipelinev1multiplatformphplaravel8v1poc1.syncsystem.com.br/system/setup/)
+                if [[ "$status" -ne 200 ]] ; then
+                    echo "Site not reachable"
+                    exit 1
+                fi              
