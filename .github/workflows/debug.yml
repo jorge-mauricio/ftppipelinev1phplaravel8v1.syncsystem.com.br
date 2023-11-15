@@ -57,26 +57,26 @@ jobs:
             #         echo "Content: $response"
             #     fi
               run: |
-                status_code=$(curl --write-out "%{http_code}" --silent --output /dev/null https://ftppipelinev1backendphplaravel8v1poc1.syncsystem.com.br/system/setup/)
+                status_code=$(curl --write-out "%{http_code}" --silent --output /dev/null https://${{ secrets.BACKEND_FTP_ADDRESS }}/system/setup/)
                 if [[ "$status_code" -ne 200 ]] ; then
                     echo "Deploy Follow-up Actions Error - Debug and Check Steps/Log"
                     exit 1
                 else
                     echo "Deploy Follow-up Actions Successful"
                     echo "Content:"
-                    curl --silent https://ftppipelinev1backendphplaravel8v1poc1.syncsystem.com.br/system/setup/
+                    curl --silent https://${{ secrets.BACKEND_FTP_ADDRESS }}/system/setup/
                 fi                
 
             - name: Deploy Follow-up Actions (frontend)
               run: |
-                status_code=$(curl --write-out "%{http_code}" --silent --output /dev/null https://ftppipelinev1backendphplaravel8v1poc1.syncsystem.com.br/system/setup/)
+                status_code=$(curl --write-out "%{http_code}" --silent --output /dev/null https://${{ secrets.FRONTEND_FTP_ADDRESS }}/system/setup/)
                 if [[ "$status_code" -ne 200 ]] ; then
                     echo "Deploy Follow-up Actions Error - Debug and Check Steps/Log"
                     exit 1
                 else
                     echo "Deploy Follow-up Actions Successful"
                     echo "Content:"
-                    curl --silent https://ftppipelinev1backendphplaravel8v1poc1.syncsystem.com.br/system/setup/
+                    curl --silent https://${{ secrets.FRONTEND_FTP_ADDRESS }}/system/setup/
                 fi                
 
 
