@@ -46,27 +46,39 @@ jobs:
             #         exit 1
             #     fi
 
+            #   run: |
+            #     response=$(curl --write-out "\n\nStatus Code: %{http_code}" --silent https://ftppipelinev1backendphplaravel8v1poc1.syncsystem.com.br/system/setup/)
+            #     status=$(echo "$response" | tail -n1 | awk '{print $4}') # Extract status code
+            #     if [[ "$status" -ne 200 ]] ; then
+            #         echo "Deploy Follow-up Actions Error - Debug and Check Steps/Log"
+            #         exit 1
+            #     else
+            #         echo "Deploy Follow-up Actions Successful"
+            #         echo "Content: $response"
+            #     fi
               run: |
-                response=$(curl --write-out "\n\nStatus Code: %{http_code}" --silent https://ftppipelinev1backendphplaravel8v1poc1.syncsystem.com.br/system/setup/)
-                status=$(echo "$response" | tail -n1 | awk '{print $4}') # Extract status code
-                if [[ "$status" -ne 200 ]] ; then
+                status_code=$(curl --write-out "%{http_code}" --silent --output /dev/null https://ftppipelinev1backendphplaravel8v1poc1.syncsystem.com.br/system/setup/)
+                if [[ "$status_code" -ne 200 ]] ; then
                     echo "Deploy Follow-up Actions Error - Debug and Check Steps/Log"
                     exit 1
                 else
                     echo "Deploy Follow-up Actions Successful"
-                    echo "Content: $response"
-                fi
+                    echo "Content:"
+                    curl --silent https://ftppipelinev1backendphplaravel8v1poc1.syncsystem.com.br/system/setup/
+                fi                
 
             - name: Deploy Follow-up Actions (frontend)
               run: |
-                response=$(curl --write-out "\n\nStatus Code: %{http_code}" --silent https://ftppipelinev1backendphplaravel8v1poc1.syncsystem.com.br/system/setup/)
-                status=$(echo "$response" | tail -n1 | awk '{print $4}') # Extract status code
-                if [[ "$status" -ne 200 ]] ; then
+                status_code=$(curl --write-out "%{http_code}" --silent --output /dev/null https://ftppipelinev1backendphplaravel8v1poc1.syncsystem.com.br/system/setup/)
+                if [[ "$status_code" -ne 200 ]] ; then
                     echo "Deploy Follow-up Actions Error - Debug and Check Steps/Log"
                     exit 1
                 else
                     echo "Deploy Follow-up Actions Successful"
-                    echo "Content: $response"
-                fi
-            # TODO: Seems that ${{ secrets.FRONTEND_FTP_ADDRESS }} doesn't work. Set these up in variable space (automate).
+                    echo "Content:"
+                    curl --silent https://ftppipelinev1backendphplaravel8v1poc1.syncsystem.com.br/system/setup/
+                fi                
+
+
+            # TODO: Seems that secrets.FRONTEND_FTP_ADDRESS doesn't work. Set these up in variable space (automate).
                 
