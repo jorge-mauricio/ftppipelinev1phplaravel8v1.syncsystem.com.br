@@ -21,6 +21,10 @@ jobs:
                 php-version: '8.0'
                 tools: composer
 
+            - name: Install Composer dependencies
+              run: composer install
+              working-directory: ''
+
             - name: Check Endpoints
             #working-directory: ./syncsystem-laravel8-v1
               run: |
