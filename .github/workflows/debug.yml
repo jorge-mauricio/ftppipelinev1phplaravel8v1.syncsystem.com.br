@@ -19,13 +19,14 @@ jobs:
               uses: shivammathur/setup-php@v2
               with:
                 php-version: '8.0'
+                tools: composer
 
             - name: Check Endpoints
             #working-directory: ./syncsystem-laravel8-v1
               run: |
                 until $(curl -s -o /dev/null -w "%{http_code}" \
-                https://${{ secrets.FRONTEND_FTP_ADDRESS }}/system/setup/ \
-                https://${{ secrets.BACKEND_FTP_ADDRESS }}/system/setup/ == 200); do
+                https://ftppipelinev1backendphplaravel8v1poc1.syncsystem.com.br/system/setup/ \
+                https://ftppipelinev1multiplatformphplaravel8v1poc1.syncsystem.com.br/system/setup/ == 200); do
                 echo "Waiting for endpoints..."
                 sleep 30
                 done
