@@ -24,9 +24,7 @@ jobs:
             - name: Check Endpoints
             #working-directory: ./syncsystem-laravel8-v1
               run: |
-                until $(curl -s -o /dev/null -w "%{http_code}" \
-                https://ftppipelinev1backendphplaravel8v1poc1.syncsystem.com.br/system/setup/ \
-                https://ftppipelinev1multiplatformphplaravel8v1poc1.syncsystem.com.br/system/setup/ == 200); do
+                until $(curl -s -o /dev/null -w "%{http_code}" https://ftppipelinev1backendphplaravel8v1poc1.syncsystem.com.br/system/setup/ https://ftppipelinev1multiplatformphplaravel8v1poc1.syncsystem.com.br/system/setup/ == 200); do
                 echo "Waiting for endpoints..."
                 sleep 30
                 done
